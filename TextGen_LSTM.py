@@ -60,7 +60,7 @@ def train(model, X, Y, n_epochs, b_size, vocab_size, **kwargs):
 
     model.compile(loss = loss, optimizer = opt)
 
-    filepath        = "weights-improvement-{epoch:02d}-{loss:.4f}.keras"
+    filepath        = "weights-improvement-{epoch:02d}-{loss:.4f}.h5"
     checkpoint      = ModelCheckpoint(filepath, monitor = 'loss', verbose = 1, save_best_only = True, mode = 'min')
     callbacks_list  = [checkpoint]
     X               = X / float(vocab_size)
