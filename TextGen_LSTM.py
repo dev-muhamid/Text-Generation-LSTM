@@ -1,15 +1,10 @@
-import keras
-from pyexpat import model
-from networkx import generate_gexf
-import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
-from keras.models import Sequential
-from keras.models import Model
-from keras.layers import LSTM, Dense, Dropout
-from keras.callbacks import ModelCheckpoint
-from tensorflow import keras
-from keras.utils import to_categorical  # Or any other function you need
+import pandas as pd
 import numpy as np
 import os
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import LSTM, Dense, Dropout, Input
+from tensorflow.keras.callbacks import ModelCheckpoint
+from tensorflow.keras.utils import to_categorical
 
 SEQ_LENGTH = 100
 hidden_dim=128
