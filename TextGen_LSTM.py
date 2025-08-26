@@ -140,11 +140,12 @@ print(Y[0])
 
 print("Shape of input data ", X.shape, "\nShape of output data ", Y.shape)
 
-train(model, X[:1024], Y[:1024], 2, 512, vocab_size)
+model   = create_model(1, X.shape, 256, Y.shape[1], mode = 'train')
 
+train(model, X[:1024], Y[:1024], 10, 512, vocab_size)
 
 # Iterating through each model and generating text
 for filename in os.listdir():
-    if filename.endswith('.hdf5'):
+    if filename.endswith('.h5'):
         print("Model Name:", filename)
-        generate_gexf(model, X, filename, ix_to_char, vocab_size)
+        generate_text(model, X, filename, ix_to_char, vocab_size)
