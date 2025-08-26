@@ -66,12 +66,11 @@ def train(model, X, Y, n_epochs, b_size, vocab_size, **kwargs):
     X               = X / float(vocab_size)
     model.fit(X, Y, epochs = n_epochs, batch_size = b_size, callbacks = callbacks_list)
 
-    def generate_text(model, X, filename, ix_to_char, vocab_size):
+def generate_text(model, X, filename, ix_to_char, vocab_size):
 
     # Load the weights from the epoch with the least loss
-    # 
-     model.load_weights(filename)
-     model.compile(loss = 'categorical_crossentropy', optimizer = 'adam')
+    model.load_weights(filename)
+    model.compile(loss = 'categorical_crossentropy', optimizer = 'adam')
 
     start   = np.random.randint(0, len(X) - 1)
     pattern = np.ravel(X[start]).tolist()
@@ -95,7 +94,7 @@ def train(model, X, Y, n_epochs, b_size, vocab_size, **kwargs):
 
 import zipfile
 
-filename = filename = 'C:/Users/mr708/VScode_Projects/PythonProjects/game_of_thrones.txt.zip'
+filename = 'game_of_thrones.txt.zip'
 
 # Extract the first text file from the ZIP archive
 with zipfile.ZipFile(filename, 'r') as zip_ref:
