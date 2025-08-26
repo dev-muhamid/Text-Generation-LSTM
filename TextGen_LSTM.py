@@ -7,9 +7,6 @@ from tensorflow.keras.callbacks import ModelCheckpoint
 from tensorflow.keras.utils import to_categorical
 
 SEQ_LENGTH = 100
-hidden_dim=128
-drop_rate=0.2
-n_out=51
 test_x = np.array([1, 2, 0, 4, 3, 7, 10])
 
 # one hot encoding
@@ -24,24 +21,11 @@ def create_functional_model(n_layers, input_shape, hidden_dim, n_out, **kwargs):
     mode        = kwargs.get('mode', 'train')
     hidden_dim  = int(hidden_dim)
 
-# Define the input layer
-inputs = keras.layers.Input(shape=(SEQ_LENGTH, 1))
+    inputs      = Input(shape = (input_shape[1], input_shape[2]))
+    model       = LSTM(hidden_dim, return_sequences = True)(inputs)
+    model       = Dropout(drop)(model)
+    model       = Dense(n_out)(model)
 
-
-# Define the LSTM layer
-lstm = LSTM(hidden_dim, return_sequences=True)(inputs)
-
-# Define the dropout layer
-dropout = Dropout(drop_rate)(lstm)
-
-# Define the dense layer
-dense = Dense(51, activation='softmax')(dropout)
-
-# Create the model
-model = Model(inputs=inputs, outputs=dense)
-
-# Compile the model
-model.compile(loss='categorical_crossentropy', optimizer='adam')
 # Using keras sequential model
 def create_model(n_layers, input_shape, hidden_dim, n_out, **kwargs):
     drop        = kwargs.get('drop_rate', 0.2)
