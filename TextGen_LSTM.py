@@ -158,8 +158,27 @@ model   = create_model(1, X.shape, 256, Y.shape[1], mode = 'train')
 
 train(model, X[:1024], Y[:1024], 10, 512, vocab_size)
 
-# Iterating through each model and generating text
+# Find the best model
+best_model = None
 for filename in os.listdir():
     if filename.endswith('.h5'):
-        print("Model Name:", filename)
-        generate_text(model, X, filename, ix_to_char, vocab_size)
+        if best_model is None or filename > best_model:
+            best_model = filename
+
+if best_model:
+    print(f"Using best model: {best_model}")
+    
+    while True:
+        choice = input("\nChoose option:\n1. Generate with custom prompt\n2. Generate random text\n3. Exit\nEnter choice (1-3): ")
+        
+        if choice == '1':
+            prompt = input("Enter your prompt: ")
+            generate_text_with_prompt(model, best_model, ix_to_char, char_to_int, vocab_size, prompt)
+        elif choice == '2':
+            generate_text(model, X, best_model, ix_to_char, vocab_size)
+        elif choice == '3':
+            break
+        else:
+            print("Invalid choice. Please enter 1, 2, or 3.")
+else:
+    print("No trained models found.")
