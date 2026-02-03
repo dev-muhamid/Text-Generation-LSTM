@@ -66,6 +66,27 @@ def train(model, X, Y, n_epochs, b_size, vocab_size, **kwargs):
     X               = X / float(vocab_size)
     model.fit(X, Y, epochs = n_epochs, batch_size = b_size, callbacks = callbacks_list)
 
+def generate_text_with_prompt(model, filename, ix_to_char, char_to_int, vocab_size, prompt_text):
+    model.load_weights(filename)
+    model.compile(loss = 'categorical_crossentropy', optimizer = 'adam')
+    
+    # Convert prompt to pattern
+    pattern = [char_to_int.get(char, 1) for char in prompt_text.lower()[-SEQ_LENGTH:]]
+    if len(pattern) < SEQ_LENGTH:
+        pattern = [1] * (SEQ_LENGTH - len(pattern)) + pattern
+    
+    print("Seed:", '"' + prompt_text + '"')
+    output = []
+    for i in range(250):
+        x = np.reshape(pattern, (1, len(pattern), 1)) / float(vocab_size)
+        prediction = model.predict(x, verbose = 0)
+        index = np.argmax(prediction)
+        output.append(index)
+        pattern.append(index)
+        pattern = pattern[1:]
+    
+    print("Generated:", '"' + ''.join([ix_to_char[value] for value in output]) + '"')
+
 def generate_text(model, X, filename, ix_to_char, vocab_size):
 
     # Load the weights from the epoch with the least loss
