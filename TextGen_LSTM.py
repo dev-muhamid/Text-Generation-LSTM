@@ -88,30 +88,23 @@ def generate_text_with_prompt(model, filename, ix_to_char, char_to_int, vocab_si
     print("Generated:", '"' + ''.join([ix_to_char[value] for value in output]) + '"')
 
 def generate_text(model, X, filename, ix_to_char, vocab_size):
-
-    # Load the weights from the epoch with the least loss
     model.load_weights(filename)
     model.compile(loss = 'categorical_crossentropy', optimizer = 'adam')
-
-    start   = np.random.randint(0, len(X) - 1)
+    
+    start = np.random.randint(0, len(X) - 1)
     pattern = np.ravel(X[start]).tolist()
-
-    # We seed the model with a random sequence of 100 so it can start predicting
-    print ("Seed:")
-    print ("\"", ''.join([ix_to_char[value] for value in pattern]), "\"")
+    
+    print("Seed:", '"' + ''.join([ix_to_char[value] for value in pattern]) + '"')
     output = []
     for i in range(250):
-        x           = np.reshape(pattern, (1, len(pattern), 1))
-        x           = x / float(vocab_size)
-        prediction  = model.predict(x, verbose = 0)
-        index       = np.argmax(prediction)
-        result      = index
-        output.append(result)
+        x = np.reshape(pattern, (1, len(pattern), 1)) / float(vocab_size)
+        prediction = model.predict(x, verbose = 0)
+        index = np.argmax(prediction)
+        output.append(index)
         pattern.append(index)
-        pattern = pattern[1 : len(pattern)]
-
-    print("Predictions")
-    print ("\"", ''.join([ix_to_char[value] for value in output]), "\"")
+        pattern = pattern[1:]
+    
+    print("Generated:", '"' + ''.join([ix_to_char[value] for value in output]) + '"')
 
 import zipfile
 
